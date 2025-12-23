@@ -31,7 +31,7 @@ import { LeaderboardCard } from './components/leaderboard-card'
 import { MapVisualization } from './components/map-visualization'
 
 export default function DepinFeature() {
-  const { account } = useSolana()
+  const { account, connected } = useSolana()
   const { 
     client, 
     userStats, 
@@ -54,7 +54,13 @@ export default function DepinFeature() {
     return () => clearInterval(interval)
   }, [account, refreshData])
 
-  if (!account) {
+  // Debugging: log wallet state to console so we can see if it's connected and what the account object looks like
+  useEffect(() => {
+    console.debug('useSolana wallet state:', { connected, account })
+  }, [connected, account])
+
+  // If wallet isn't connected, show the connect prompt
+  if (!connected) {
     return (
       <div className="hero py-[64px]">
         <div className="hero-content text-center">
@@ -66,6 +72,20 @@ export default function DepinFeature() {
             <div className="flex justify-center">
               <div className="wallet-dropdown" />
             </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Connected but account may still be initializing
+  if (connected && !account) {
+    return (
+      <div className="hero py-[64px]">
+        <div className="hero-content text-center">
+          <div className="max-w-md">
+            <h2 className="text-2xl font-semibold">Connecting to wallet...</h2>
+            <p className="py-4 text-muted-foreground">Please wait a moment while we fetch your account details.</p>
           </div>
         </div>
       </div>
