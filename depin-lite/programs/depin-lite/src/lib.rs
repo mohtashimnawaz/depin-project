@@ -137,28 +137,6 @@ pub mod depin_lite {
     }
 }
 
-fn parse_attestation_result(container_params: &[u8]) -> Result<bool> {
-    // Parse the attestation result from Switchboard function response
-    if container_params.is_empty() {
-        return Ok(false);
-    }
-    
-    // Try to parse as JSON first
-    if let Ok(json_str) = std::str::from_utf8(container_params) {
-        // Look for verification result in JSON
-        if json_str.contains("\"verified\":true") || json_str.contains("\"success\":true") {
-            return Ok(true);
-        }
-        if json_str.contains("\"verified\":false") || json_str.contains("\"success\":false") {
-            return Ok(false);
-        }
-    }
-    
-    // Fallback to simple byte check
-    // If first byte is 1, consider it verified
-    Ok(container_params[0] == 1)
-}
-
 #[derive(Accounts)]
 pub struct Initialize<'info> {
     #[account(
