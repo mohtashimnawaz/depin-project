@@ -59,24 +59,31 @@ const secondary: {
 export default function DashboardFeature() {
   return (
     <div>
-      <AppHero title="gm" subtitle="Say hi to your new Solana app." />
+      <AppHero title="gm" subtitle="Say hi to your new Solana DePIN app." />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {primary.map((link) => (
-            <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className="block group">
-              <Card className="h-full flex flex-col transition-all duration-200 ease-in-out group-hover:border-primary group-hover:shadow-lg group-hover:-translate-y-1">
-                <CardHeader className="flex-row items-center gap-4">
-                  {link.icon}
-                  <div>
-                    <CardTitle className="group-hover:text-primary transition-colors">{link.label}</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <p className="text-muted-foreground">{link.description}</p>
-                </CardContent>
-              </Card>
-            </a>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {primary.map((link) => {
+            const CardComponent = link.isExternal ? 'a' : Link
+            const cardProps = link.isExternal 
+              ? { href: link.href, target: "_blank", rel: "noopener noreferrer" }
+              : { href: link.href }
+            
+            return (
+              <CardComponent key={link.label} {...cardProps} className="block group">
+                <Card className="h-full flex flex-col transition-all duration-200 ease-in-out group-hover:border-primary group-hover:shadow-lg group-hover:-translate-y-1">
+                  <CardHeader className="flex-row items-center gap-4">
+                    {link.icon}
+                    <div>
+                      <CardTitle className="group-hover:text-primary transition-colors">{link.label}</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    <p className="text-muted-foreground">{link.description}</p>
+                  </CardContent>
+                </Card>
+              </CardComponent>
+            )
+          })}
         </div>
         <div className="mt-8">
           <Card>
