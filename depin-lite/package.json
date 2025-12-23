@@ -1,20 +1,52 @@
 {
-  "license": "ISC",
+  "name": "depin-lite",
+  "version": "1.0.0",
+  "description": "DePIN Lite - Proof of Activity Program for Solana",
+  "license": "MIT",
   "scripts": {
     "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
-    "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check"
+    "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check",
+    "build": "anchor build",
+    "test": "anchor test",
+    "deploy:localnet": "anchor deploy --provider.cluster localnet",
+    "deploy:devnet": "anchor deploy --provider.cluster devnet",
+    "example": "ts-node examples/basic-usage.ts"
   },
   "dependencies": {
-    "@coral-xyz/anchor": "^0.32.1"
+    "@coral-xyz/anchor": "^0.32.1",
+    "@solana/web3.js": "^1.95.4",
+    "@solana/spl-token": "^0.4.8"
   },
   "devDependencies": {
     "chai": "^4.3.4",
     "mocha": "^9.0.3",
     "ts-mocha": "^10.0.0",
+    "ts-node": "^10.9.2",
     "@types/bn.js": "^5.1.0",
     "@types/chai": "^4.3.0",
     "@types/mocha": "^9.0.0",
+    "@types/node": "^22.10.2",
     "typescript": "^5.7.3",
     "prettier": "^2.6.2"
-  }
+  },
+  "keywords": [
+    "solana",
+    "depin",
+    "anchor",
+    "switchboard",
+    "proof-of-activity",
+    "blockchain",
+    "web3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/depin-lite"
+  },
+  "author": "Your Name <your.email@example.com>",
+  "main": "client/depin-client.ts",
+  "files": [
+    "client/",
+    "target/idl/",
+    "target/types/"
+  ]
 }
