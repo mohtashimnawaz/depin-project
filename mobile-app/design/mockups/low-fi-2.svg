@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#f8fafc"/>
+  <rect x="60" y="30" width="200" height="28" rx="4" fill="#e6eef8"/>
+  <text x="300" y="52" fill="#111827" font-family="Arial" font-size="20">DePIN Network</text>
+
+  <!-- Hero split -->
+  <rect x="60" y="90" rx="8" width="600" height="260" fill="#fff" stroke="#e6edf3"/>
+  <rect x="680" y="120" rx="8" width="360" height="200" fill="#eaf2ff"/>
+  <text x="100" y="150" font-family="Arial" font-size="28" fill="#111827" font-weight="700">A simple way to contribute and earn</text>
+  <text x="100" y="185" font-family="Arial" font-size="14" fill="#475569">Submit location and signal data, verify coverage, and earn MAP tokens.</text>
+  <rect x="100" y="205" width="160" height="40" rx="6" fill="#c7d2fe"/>
+
+  <!-- Secondary CTAs -->
+  <rect x="60" y="370" width="1080" height="120" rx="8" fill="#fff" stroke="#e6edf3"/>
+  <text x="100" y="400" font-family="Arial" font-size="18" fill="#111827" font-weight="600">How it works</text>
+
+  <!-- Footer -->
+  <rect x="60" y="700" width="1080" height="60" rx="6" fill="#fff" stroke="#e6edf3"/>
+</svg>

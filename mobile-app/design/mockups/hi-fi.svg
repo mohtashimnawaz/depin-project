@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <defs>
+    <linearGradient id="g" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+      <stop offset="100%" stop-color="#f1f5f9" stop-opacity="1" />
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="900" fill="url(#g)"/>
+
+  <!-- Header -->
+  <text x="80" y="58" font-family="Inter, Arial, sans-serif" font-size="22" fill="#0f172a" font-weight="700">DePIN Network</text>
+  <g transform="translate(1100,28)">
+    <rect x="0" y="0" width="160" height="40" rx="8" fill="#ffffff" stroke="#e6edf3"/>
+    <text x="80" y="25" font-family="Inter, Arial, sans-serif" font-size="14" fill="#0f172a" text-anchor="middle">Get Started</text>
+  </g>
+
+  <!-- Hero -->
+  <g>
+    <rect x="80" y="110" width="1240" height="300" rx="16" fill="#ffffff" stroke="#e6edf3" />
+    <text x="150" y="180" font-family="Inter, Arial, sans-serif" font-size="44" fill="#0f172a" font-weight="800">Build and earn on the DePIN Network</text>
+    <text x="150" y="220" font-family="Inter, Arial, sans-serif" font-size="16" fill="#475569" >Contribute WiFi signal data, help grow decentralized infrastructure, and earn MAP tokens.</text>
+
+    <!-- CTA buttons -->
+    <rect x="150" y="255" width="200" height="48" rx="10" fill="#0f172a" />
+    <text x="250" y="286" font-family="Inter, Arial, sans-serif" font-size="16" fill="#ffffff" text-anchor="middle">Connect Wallet</text>
+    <rect x="370" y="255" width="200" height="48" rx="10" fill="#ffffff" stroke="#d1d5db" />
+    <text x="470" y="286" font-family="Inter, Arial, sans-serif" font-size="16" fill="#0f172a" text-anchor="middle">Explore Network</text>
+
+    <!-- Hero illustration placeholder -->
+    <rect x="870" y="150" width="360" height="200" rx="14" fill="#eef2ff" />
+    <text x="1050" y="270" font-family="Inter, Arial, sans-serif" font-size="12" fill="#6366f1" text-anchor="middle">Illustration</text>
+  </g>
+
+  <!-- Features row -->
+  <g transform="translate(80,450)">
+    <g>
+      <rect x="0" y="0" width="360" height="160" rx="12" fill="#ffffff" stroke="#e6edf3"/>
+      <text x="20" y="28" font-family="Inter, Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">Prove coverage</text>
+      <text x="20" y="54" font-family="Inter, Arial, sans-serif" font-size="13" fill="#64748b">Submit verified location and signal strength.</text>
+    </g>
+
+    <g transform="translate(380,0)">
+      <rect x="0" y="0" width="360" height="160" rx="12" fill="#ffffff" stroke="#e6edf3"/>
+      <text x="20" y="28" font-family="Inter, Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">Global reach</text>
+      <text x="20" y="54" font-family="Inter, Arial, sans-serif" font-size="13" fill="#64748b">See network coverage and recent activity.</text>
+    </g>
+
+    <g transform="translate(760,0)">
+      <rect x="0" y="0" width="360" height="160" rx="12" fill="#ffffff" stroke="#e6edf3"/>
+      <text x="20" y="28" font-family="Inter, Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">Earn rewards</text>
+      <text x="20" y="54" font-family="Inter, Arial, sans-serif" font-size="13" fill="#64748b">Track MAP token earnings and leaderboard rank.</text>
+    </g>
+  </g>
+
+  <!-- Quick stats -->
+  <g transform="translate(80,640)">
+    <rect x="0" y="0" width="1240" height="160" rx="12" fill="#ffffff" stroke="#e6edf3"/>
+    <text x="20" y="32" font-family="Inter, Arial, sans-serif" font-size="14" fill="#111827">Active Nodes</text>
+    <text x="20" y="60" font-family="Inter, Arial, sans-serif" font-size="20" fill="#111827" font-weight="700">9,234</text>
+    <text x="210" y="32" font-family="Inter, Arial, sans-serif" font-size="14" fill="#111827">Coverage</text>
+    <text x="210" y="60" font-family="Inter, Arial, sans-serif" font-size="20" fill="#111827" font-weight="700">78.5%</text>
+    <text x="400" y="32" font-family="Inter, Arial, sans-serif" font-size="14" fill="#111827">Total Rewards</text>
+    <text x="400" y="60" font-family="Inter, Arial, sans-serif" font-size="20" fill="#111827" font-weight="700">2.8M MAP</text>
+    <text x="610" y="32" font-family="Inter, Arial, sans-serif" font-size="14" fill="#111827">Contributors</text>
+    <text x="610" y="60" font-family="Inter, Arial, sans-serif" font-size="20" fill="#111827" font-weight="700">12,847</text>
+  </g>
+
+</svg>

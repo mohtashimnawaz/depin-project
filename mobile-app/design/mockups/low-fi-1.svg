@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#f7fafc"/>
+  <rect x="60" y="30" width="200" height="28" rx="4" fill="#e2e8f0"/>
+  <text x="300" y="52" fill="#1f2937" font-family="Arial" font-size="20">DePIN Network</text>
+
+  <!-- Hero -->
+  <rect x="60" y="90" rx="8" width="1080" height="240" fill="#fff" stroke="#e6edf3"/>
+  <text x="100" y="150" font-family="Arial" font-size="28" fill="#111827" font-weight="700">Build and earn on the DePIN Network</text>
+  <text x="100" y="185" font-family="Arial" font-size="14" fill="#4b5563">Contribute WiFi signal data, help the network grow, and earn MAP tokens.</text>
+  <rect x="100" y="205" width="160" height="40" rx="6" fill="#c7d2fe"/>
+  <rect x="270" y="205" width="160" height="40" rx="6" fill="#e5e7eb"/>
+
+  <!-- Features -->
+  <rect x="60" y="360" width="350" height="140" rx="8" fill="#fff" stroke="#e6edf3"/>
+  <rect x="425" y="360" width="350" height="140" rx="8" fill="#fff" stroke="#e6edf3"/>
+  <rect x="790" y="360" width="350" height="140" rx="8" fill="#fff" stroke="#e6edf3"/>
+  <text x="90" y="390" font-family="Arial" font-size="16" fill="#111827" font-weight="600">Prove coverage</text>
+  <text x="455" y="390" font-family="Arial" font-size="16" fill="#111827" font-weight="600">Global reach</text>
+  <text x="820" y="390" font-family="Arial" font-size="16" fill="#111827" font-weight="600">Join contributors</text>
+
+  <!-- Quick stats -->
+  <rect x="60" y="520" width="1080" height="160" rx="8" fill="#fff" stroke="#e6edf3"/>
+  <text x="100" y="560" font-family="Arial" font-size="16" fill="#111827" font-weight="600">Active Nodes</text>
+  <text x="100" y="590" font-family="Arial" font-size="24" fill="#111827" font-weight="700">9,234</text>
+
+  <!-- Footer -->
+  <rect x="60" y="700" width="1080" height="60" rx="6" fill="#fff" stroke="#e6edf3"/>
+</svg>

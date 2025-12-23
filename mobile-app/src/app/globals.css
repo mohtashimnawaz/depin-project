@@ -116,6 +116,20 @@
     @apply border-border outline-ring/50;
   }
 
+  :root {
+    --brand-primary: #0f172a;
+    --brand-accent: #6366f1;
+    --surface: #ffffff;
+    --muted: #64748b;
+    --border: #e6edf3;
+  }
+
+  html, body {
+    font-family: theme('fontFamily.sans');
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
     @apply bg-background text-foreground;
   }

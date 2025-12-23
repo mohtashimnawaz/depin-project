@@ -1,11 +1,11 @@
-import LandingHero from '@/components/landing-hero'
+import HeroHiFi from '@/components/hero-hi-fi'
 import { QuickStats } from '@/components/quick-stats'
 import Link from 'next/link'
 
 export default function Home() {
   return (
     <div>
-      <LandingHero />
+      <HeroHiFi />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <QuickStats />
