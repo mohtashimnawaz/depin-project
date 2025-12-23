@@ -92,7 +92,7 @@ const PROGRAM_ID = process.env.NEXT_PUBLIC_DEPIN_PROGRAM_ID || '7nMrAY8nNgHcyAim
 const RPC_ENDPOINT = process.env.NEXT_PUBLIC_RPC_ENDPOINT || 'http://localhost:8899'
 
 export function useDepinClient() {
-  const { account, connection } = useSolana()
+  const { account, client: solanaClient } = useSolana()
   const [client, setClient] = useState<MockDepinClient | null>(null)
   const [userStats, setUserStats] = useState<UserStats | null>(null)
   const [canSubmit, setCanSubmit] = useState<CanSubmitResult | null>(null)
@@ -101,11 +101,11 @@ export function useDepinClient() {
 
   // Initialize client
   useEffect(() => {
-    if (connection) {
-      const depinClient = new MockDepinClient(connection, PROGRAM_ID)
-      setClient(depinClient)
-    }
-  }, [connection])
+    // Create connection directly since we need it for the mock client
+    const connection = new Connection(RPC_ENDPOINT)
+    const depinClient = new MockDepinClient(connection, PROGRAM_ID)
+    setClient(depinClient)
+  }, [])
 
   // Fetch user data
   const refreshData = useCallback(async () => {
@@ -115,9 +115,10 @@ export function useDepinClient() {
     setError(null)
 
     try {
+      const userPublicKey = new PublicKey(account.address)
       const [stats, submitStatus] = await Promise.all([
-        client.getUserStats(account.address),
-        client.canSubmitActivity(account.address)
+        client.getUserStats(userPublicKey),
+        client.canSubmitActivity(userPublicKey)
       ])
 
       setUserStats(stats)
