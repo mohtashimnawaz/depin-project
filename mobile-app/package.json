@@ -8,6 +8,7 @@
     "test:watch": "jest --watch --config jest.config.ts",
     "test:e2e": "playwright test",
     "test:axe": "jest --config jest.config.ts --testPathPattern \".*accessibility.test.tsx$\" --passWithNoTests",
+    "lhci:autorun": "lhci autorun --config=lhci.config.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint",
@@ -57,6 +58,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
+    "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.57.0",
     "@tailwindcss/postcss": "^4.1.13",
     "@testing-library/jest-dom": "^6.9.1",
