@@ -83,7 +83,6 @@ pub mod depin_lite {
 
     pub fn verify_and_reward(ctx: Context<VerifyAndReward>) -> Result<()> {
         let user_activity = &mut ctx.accounts.user_activity;
-        let program_state = &mut ctx.accounts.program_state;
 
         // Verify the activity is pending verification
         require!(user_activity.pending_verification, ErrorCode::NoPendingVerification);
@@ -102,9 +101,10 @@ pub mod depin_lite {
         // Mint MAP tokens as reward (5 tokens with 6 decimals = 5_000_000)
         let reward_amount = 5_000_000u64;
         
+        let program_state_bump = ctx.accounts.program_state.bump;
         let seeds = &[
             b"program_state".as_ref(),
-            &[program_state.bump],
+            &[program_state_bump],
         ];
         let signer = &[&seeds[..]];
 
@@ -124,7 +124,7 @@ pub mod depin_lite {
         // Update state
         user_activity.pending_verification = false;
         user_activity.total_rewards_earned += reward_amount;
-        program_state.total_rewards_distributed += reward_amount;
+        ctx.accounts.program_state.total_rewards_distributed += reward_amount;
 
         msg!("Activity verified and {} MAP tokens rewarded", reward_amount / 1_000_000);
 
