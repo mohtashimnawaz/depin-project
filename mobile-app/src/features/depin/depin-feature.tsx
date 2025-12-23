@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator'
 import { AppHero } from '@/components/app-hero'
 import { NotificationBanner } from '@/components/notification-banner'
 import { useSolana } from '@/components/solana/use-solana'
+import { useWalletUi, useWalletUiWallet } from '@wallet-ui/react'
 import { 
   MapPin, 
   Wifi, 
@@ -59,7 +60,34 @@ export default function DepinFeature() {
     console.debug('useSolana wallet state:', { connected, account })
   }, [connected, account])
 
-  // If wallet isn't connected, show the connect prompt
+  // Small auto-connector subcomponent: triggers `connect()` for the provided wallet once
+  function AutoConnector({ wallet }: { wallet: any }) {
+    const { connect } = useWalletUiWallet({ wallet })
+    useEffect(() => {
+      let cancelled = false
+      async function attempt() {
+        try {
+          // Try to connect once automatically. If the user has previously authorized, this should be quick.
+          await connect()
+        } catch (err) {
+          // ignore errors (user closed popup or denied)
+          if (!cancelled) console.debug('Auto connect failed:', err)
+        }
+      }
+      attempt()
+      return () => {
+        cancelled = true
+      }
+    }, [connect])
+
+    return null
+  }
+
+  // Expose a small debug reconnect UI while we stabilize wallet connection
+  const walletUi = useWalletUi()
+  const { wallets, wallet: selectedWallet } = walletUi
+
+  // If wallet isn't connected, show the connect prompt (and auto-attempt if a wallet was previously selected)
   if (!connected) {
     return (
       <div className="hero py-[64px]">
@@ -69,8 +97,31 @@ export default function DepinFeature() {
             <p className="py-6">
               Connect your wallet to start earning MAP tokens by contributing to the decentralized physical infrastructure network.
             </p>
-            <div className="flex justify-center">
-              <div className="wallet-dropdown" />
+            <div className="flex flex-col items-center gap-3">
+              <div className="flex justify-center">
+                <div className="wallet-dropdown" />
+              </div>
+              {/** If there is a selected wallet provided by the wallet UI, try auto-connecting quietly */}
+              {selectedWallet ? <AutoConnector wallet={selectedWallet} /> : wallets?.length === 1 ? <AutoConnector wallet={wallets[0]} /> : null}
+
+              {/** Manual reconnect button for debugging */}
+              {selectedWallet ? (
+                <div className="mt-3 text-sm text-muted-foreground">
+                  <button
+                    className="underline"
+                    onClick={async () => {
+                      try {
+                        const { connect } = useWalletUiWallet({ wallet: selectedWallet })
+                        await connect()
+                      } catch (err) {
+                        console.error('Manual reconnect failed:', err)
+                      }
+                    }}
+                  >
+                    Reconnect
+                  </button>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
@@ -91,6 +142,9 @@ export default function DepinFeature() {
       </div>
     )
   }
+
+  // Debug: render the account address (temporary) at the top of the page for visibility
+  const accountAddress = account?.address?.toString ? account.address.toString() : account?.address || null
 
   const handleActivitySubmit = async (activityData: {
     gpsLat: number
@@ -113,7 +167,12 @@ export default function DepinFeature() {
       <AppHero 
         title="DePIN Network" 
         subtitle="Earn MAP tokens by contributing WiFi signal data to the decentralized network"
-      />
+      >
+        {/* Temporary debug: show connected account address */}
+        {accountAddress && (
+          <div className="mt-4 text-sm text-muted-foreground">Connected: <span className="font-mono">{accountAddress}</span></div>
+        )}
+      </AppHero>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <NotificationBanner />
