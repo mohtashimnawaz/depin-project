@@ -1,0 +1,21 @@
+name: Secret Scanning (Gitleaks)
+
+on:
+  pull_request:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  gitleaks:
+    name: Scan for secrets with gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        uses: zricethezav/gitleaks-action@v2
+        with:
+          args: '--redact --exit-code=1 --report-format=summary'
