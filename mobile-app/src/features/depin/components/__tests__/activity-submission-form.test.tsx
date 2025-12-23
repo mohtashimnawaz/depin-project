@@ -10,14 +10,18 @@ describe('ActivitySubmissionForm', () => {
     // Switch to manual input
     fireEvent.click(screen.getByRole('button', { name: /Manual Input/i }))
 
-    // Click submit without entering fields
-    fireEvent.click(screen.getByRole('button', { name: /Submit Activity/i }))
+    // Submit button should be disabled initially (fields empty)
+    const submitButton = screen.getByRole('button', { name: /Submit Activity/i })
+    expect(submitButton).toBeDisabled()
 
-    await waitFor(() => expect(screen.getByText(/Please fix the highlighted fields/i)).toBeInTheDocument())
-
-    // Provide invalid latitude
+    // Provide invalid latitude (and fill other required fields so button enables)
     fireEvent.change(screen.getByLabelText(/Latitude/i), { target: { value: '1000' } })
-    fireEvent.click(screen.getByRole('button', { name: /Submit Activity/i }))
+    fireEvent.change(screen.getByLabelText(/Longitude/i), { target: { value: '0' } })
+    fireEvent.change(screen.getByLabelText(/Signal Strength/i), { target: { value: '-65' } })
+
+    expect(submitButton).not.toBeDisabled()
+
+    fireEvent.click(submitButton)
 
     await waitFor(() => expect(screen.getByText(/Latitude must be between -90 and 90/i)).toBeInTheDocument())
   })
