@@ -226,12 +226,6 @@ pub struct VerifyAndReward<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
     
-    /// CHECK: Switchboard Function Account
-    pub function: AccountInfo<'info>,
-    
-    /// CHECK: Switchboard Function Request Account
-    pub function_request: AccountInfo<'info>,
-    
     pub token_program: Program<'info, Token>,
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub system_program: Program<'info, System>,
@@ -297,10 +291,6 @@ pub enum ErrorCode {
     InvalidSignalStrength,
     #[msg("No pending verification for this user.")]
     NoPendingVerification,
-    #[msg("Switchboard function request not triggered.")]
-    RequestNotTriggered,
-    #[msg("Switchboard function request failed.")]
-    RequestFailed,
-    #[msg("Oracle attestation failed - data verification unsuccessful.")]
-    AttestationFailed,
+    #[msg("Verification too soon. Wait at least 1 minute after submission.")]
+    VerificationTooSoon,
 }
