@@ -61,7 +61,27 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmi
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(
           resolve,
-          reject,
+          (error) => {
+            // Handle GeolocationPositionError properly
+            let errorMessage = 'Failed to get location'
+            
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                errorMessage = 'Location access denied by user'
+                break
+              case error.POSITION_UNAVAILABLE:
+                errorMessage = 'Location information is unavailable'
+                break
+              case error.TIMEOUT:
+                errorMessage = 'Location request timed out'
+                break
+              default:
+                errorMessage = error.message || 'Unknown location error'
+                break
+            }
+            
+            reject(new Error(errorMessage))
+          },
           {
             enableHighAccuracy: true,
             timeout: 10000,
@@ -77,11 +97,10 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmi
       })
     } catch (error) {
       console.error('Error getting location:', error)
-      setLocationError(
-        error instanceof Error 
-          ? error.message 
-          : 'Failed to get location. Please enable location services.'
-      )
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : 'Failed to get location. Please enable location services or use manual input.'
+      setLocationError(errorMessage)
     } finally {
       setIsGettingLocation(false)
     }
@@ -112,9 +131,8 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmi
     }
   }
 
-  // Auto-detect on component mount
+  // Auto-detect network info on component mount, but let user trigger location
   useEffect(() => {
-    getCurrentLocation()
     getNetworkInfo()
   }, [])
 
@@ -211,8 +229,18 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmi
                         Accuracy: ±{Math.round(location.accuracy)}m
                       </div>
                     </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={getCurrentLocation}
+                      className="w-full"
+                    >
+                      <RefreshCw className="h-4 w-4 mr-2" />
+                      Update Location
+                    </Button>
                   </div>
-                ) : (
+                ) : locationError ? (
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <AlertCircle className="h-4 w-4 text-red-500" />
@@ -228,6 +256,22 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmi
                     >
                       <RefreshCw className="h-4 w-4 mr-2" />
                       Retry Location
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">
+                      Click to detect your current GPS location
+                    </p>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={getCurrentLocation}
+                      className="w-full"
+                    >
+                      <MapPin className="h-4 w-4 mr-2" />
+                      Get My Location
                     </Button>
                   </div>
                 )}
