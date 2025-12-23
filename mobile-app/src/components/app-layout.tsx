@@ -3,6 +3,7 @@
 import { ThemeProvider } from './theme-provider'
 import { Toaster } from './ui/sonner'
 import { AppHeader } from '@/components/app-header'
+import { NavigationTabs } from '@/components/navigation-tabs'
 import React from 'react'
 import { AppFooter } from '@/components/app-footer'
 import { ClusterUiChecker } from '@/features/cluster/ui/cluster-ui-checker'
@@ -24,6 +25,7 @@ export function AppLayout({
           <ClusterUiChecker>
             <AccountUiChecker />
           </ClusterUiChecker>
+          <NavigationTabs />
           {children}
         </main>
         <AppFooter />

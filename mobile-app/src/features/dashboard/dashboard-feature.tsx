@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ArrowRight, BookOpen, CookingPot, Droplets, LucideWallet, MessageCircleQuestion, MapPin, Coins } from 'lucide-react'
 import React from 'react'
 import { AppHero } from '@/components/app-hero'
+import { QuickStats } from '@/components/quick-stats'
 import Link from 'next/link'
 
 const primary: {
@@ -61,6 +62,7 @@ export default function DashboardFeature() {
     <div>
       <AppHero title="gm" subtitle="Say hi to your new Solana DePIN app." />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <QuickStats />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {primary.map((link) => {
             const CardComponent = link.isExternal ? 'a' : Link

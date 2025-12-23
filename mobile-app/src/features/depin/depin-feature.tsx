@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { AppHero } from '@/components/app-hero'
+import { NotificationBanner } from '@/components/notification-banner'
 import { useSolana } from '@/components/solana/use-solana'
 import { 
   MapPin, 
@@ -25,6 +26,9 @@ import { ActivitySubmissionForm } from './components/activity-submission-form'
 import { UserStatsCard } from './components/user-stats-card'
 import { RecentActivitiesCard } from './components/recent-activities-card'
 import { RewardsCard } from './components/rewards-card'
+import { NetworkStatsCard } from './components/network-stats-card'
+import { LeaderboardCard } from './components/leaderboard-card'
+import { MapVisualization } from './components/map-visualization'
 
 export default function DepinFeature() {
   const { account } = useSolana()
@@ -92,6 +96,8 @@ export default function DepinFeature() {
       />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <NotificationBanner />
+        
         {/* Status Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
@@ -257,6 +263,28 @@ export default function DepinFeature() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Network Overview Section */}
+        <div className="mt-12">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold mb-2">Network Overview</h2>
+            <p className="text-muted-foreground">
+              Explore the global DePIN network and see how you compare with other contributors
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <NetworkStatsCard isLoading={isLoading} />
+            <MapVisualization isLoading={isLoading} />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
+            <LeaderboardCard 
+              userAddress={account?.address.toString()} 
+              isLoading={isLoading} 
+            />
+          </div>
+        </div>
       </div>
     </div>
   )
