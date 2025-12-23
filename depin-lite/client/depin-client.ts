@@ -1,13 +1,10 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program, AnchorProvider, Wallet } from "@coral-xyz/anchor";
-import { DepinLite } from "../target/types/depin_lite";
 import { 
   Connection, 
   PublicKey, 
   Keypair, 
-  SystemProgram,
-  Transaction,
-  sendAndConfirmTransaction
+  SystemProgram
 } from "@solana/web3.js";
 import { 
   TOKEN_PROGRAM_ID, 
@@ -42,7 +39,7 @@ export interface ProgramStateAccount {
 }
 
 export class DepinClient {
-  private program: Program<DepinLite>;
+  private program: Program<any>;
   private provider: AnchorProvider;
   private connection: Connection;
 
@@ -291,7 +288,7 @@ export class DepinClient {
     pendingVerification: boolean;
   }> {
     const userActivity = await this.getUserActivity(userPublicKey);
-    const mapBalance = await getUserMapBalance(userPublicKey);
+    const mapBalance = await this.getUserMapBalance(userPublicKey);
 
     if (!userActivity) {
       return {
