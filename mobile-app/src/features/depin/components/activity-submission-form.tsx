@@ -16,6 +16,7 @@ import {
   RefreshCw,
   Smartphone
 } from 'lucide-react'
+import { LocationTroubleshooting } from '@/components/location-troubleshooting'
 
 interface ActivitySubmissionFormProps {
   onSubmit: (data: { gpsLat: number; gpsLong: number; signalStrength: number }) => Promise<void>
@@ -202,6 +203,24 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmi
 
         {!useManualInput && (
           <>
+            {/* Location Permission Info */}
+            {!location && !isGettingLocation && (
+              <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4">
+                <div className="flex items-start gap-3">
+                  <MapPin className="h-5 w-5 text-blue-500 mt-0.5" />
+                  <div className="space-y-1">
+                    <h4 className="text-sm font-medium text-blue-900 dark:text-blue-100">
+                      Location Access Required
+                    </h4>
+                    <p className="text-sm text-blue-700 dark:text-blue-300">
+                      To earn MAP tokens, we need your GPS location to verify your contribution to the network. 
+                      Your location data is used only for verification and is not stored permanently.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Location Detection */}
             <Card>
               <CardHeader className="pb-3">
@@ -415,9 +434,15 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmi
       </Button>
 
       {!useManualInput && (!location || !networkInfo) && (
-        <p className="text-xs text-center text-muted-foreground">
-          Please allow location access and ensure you're connected to WiFi
-        </p>
+        <div className="text-xs text-center text-muted-foreground space-y-1">
+          <p>Please allow location access and ensure you're connected to WiFi</p>
+          <p>Or switch to manual input if location detection fails</p>
+        </div>
+      )}
+
+      {/* Troubleshooting Guide */}
+      {!useManualInput && locationError && (
+        <LocationTroubleshooting />
       )}
     </form>
   )
