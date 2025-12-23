@@ -50,6 +50,10 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmi
   const [manualSignal, setManualSignal] = useState('')
   const [useManualInput, setUseManualInput] = useState(false)
 
+  // Form error states for inline validation
+  const [formError, setFormError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+
   // Get user's location
   const getCurrentLocation = async () => {
     setIsGettingLocation(true)
@@ -141,6 +145,9 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmi
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    setFormError(null)
+    setFieldErrors({})
+
     let lat: number, lng: number, signal: number
 
     if (useManualInput) {
@@ -149,28 +156,37 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmi
       signal = parseInt(manualSignal)
 
       // Validate manual input
+      const newFieldErrors: Record<string, string> = {}
+
       if (isNaN(lat) || isNaN(lng) || isNaN(signal)) {
-        alert('Please enter valid numbers for all fields')
+        newFieldErrors.manualLat = isNaN(lat) ? 'Enter a valid latitude' : ''
+        newFieldErrors.manualLng = isNaN(lng) ? 'Enter a valid longitude' : ''
+        newFieldErrors.manualSignal = isNaN(signal) ? 'Enter a valid signal value' : ''
+        setFieldErrors(newFieldErrors)
+        setFormError('Please fix the highlighted fields')
         return
       }
 
       if (lat < -90 || lat > 90) {
-        alert('Latitude must be between -90 and 90')
+        setFieldErrors({ manualLat: 'Latitude must be between -90 and 90' })
+        setFormError('Please fix the highlighted fields')
         return
       }
 
       if (lng < -180 || lng > 180) {
-        alert('Longitude must be between -180 and 180')
+        setFieldErrors({ manualLng: 'Longitude must be between -180 and 180' })
+        setFormError('Please fix the highlighted fields')
         return
       }
 
       if (signal < -100 || signal > 0) {
-        alert('Signal strength must be between -100 and 0 dBm')
+        setFieldErrors({ manualSignal: 'Signal strength must be between -100 and 0 dBm' })
+        setFormError('Please fix the highlighted fields')
         return
       }
     } else {
       if (!location || !networkInfo) {
-        alert('Please wait for location and network detection to complete')
+        setFormError('Please wait for location and network detection to complete')
         return
       }
 
@@ -188,6 +204,13 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmi
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Inline form error */}
+      {formError ? (
+        <div role="alert" className="rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+          {formError}
+        </div>
+      ) : null}
+
       {/* Status Summary */}
       {!useManualInput && (
         <div className="flex items-center justify-center gap-4 p-4 bg-muted/30 rounded-lg">
@@ -388,8 +411,13 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmi
                     placeholder="e.g., 37.7749"
                     value={manualLat}
                     onChange={(e) => setManualLat(e.target.value)}
+                    aria-invalid={fieldErrors.manualLat ? 'true' : undefined}
+                    aria-describedby={fieldErrors.manualLat ? 'latitude-error' : undefined}
                     required
                   />
+                  {fieldErrors.manualLat ? (
+                    <p id="latitude-error" className="mt-1 text-sm text-destructive">{fieldErrors.manualLat}</p>
+                  ) : null}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="longitude">Longitude</Label>
@@ -400,8 +428,13 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmi
                     placeholder="e.g., -122.4194"
                     value={manualLng}
                     onChange={(e) => setManualLng(e.target.value)}
+                    aria-invalid={fieldErrors.manualLng ? 'true' : undefined}
+                    aria-describedby={fieldErrors.manualLng ? 'longitude-error' : undefined}
                     required
                   />
+                  {fieldErrors.manualLng ? (
+                    <p id="longitude-error" className="mt-1 text-sm text-destructive">{fieldErrors.manualLng}</p>
+                  ) : null}
                 </div>
               </div>
               <div className="space-y-2">
@@ -412,8 +445,13 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmi
                   placeholder="e.g., -65"
                   value={manualSignal}
                   onChange={(e) => setManualSignal(e.target.value)}
+                  aria-invalid={fieldErrors.manualSignal ? 'true' : undefined}
+                  aria-describedby={fieldErrors.manualSignal ? 'signal-error' : undefined}
                   required
                 />
+                {fieldErrors.manualSignal ? (
+                  <p id="signal-error" className="mt-1 text-sm text-destructive">{fieldErrors.manualSignal}</p>
+                ) : null}
                 <p className="text-xs text-muted-foreground">
                   WiFi signal strength typically ranges from -30 (excellent) to -90 (poor) dBm
                 </p>
