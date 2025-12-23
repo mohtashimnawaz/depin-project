@@ -103,7 +103,7 @@ pub mod depin_lite {
         let reward_amount = 5_000_000u64;
         
         let seeds = &[
-            b"program_state",
+            b"program_state".as_ref(),
             &[program_state.bump],
         ];
         let signer = &[&seeds[..]];
