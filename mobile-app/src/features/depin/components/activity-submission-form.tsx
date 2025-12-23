@@ -17,6 +17,7 @@ import {
   Smartphone
 } from 'lucide-react'
 import { LocationTroubleshooting } from '@/components/location-troubleshooting'
+import { StatusIndicator } from '@/components/status-indicator'
 
 interface ActivitySubmissionFormProps {
   onSubmit: (data: { gpsLat: number; gpsLong: number; signalStrength: number }) => Promise<void>
@@ -187,6 +188,20 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmi
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Status Summary */}
+      {!useManualInput && (
+        <div className="flex items-center justify-center gap-4 p-4 bg-muted/30 rounded-lg">
+          <StatusIndicator 
+            status={isGettingLocation ? 'loading' : location ? 'success' : locationError ? 'error' : 'idle'}
+            label={isGettingLocation ? 'Getting Location...' : location ? 'Location Ready' : locationError ? 'Location Failed' : 'Location Needed'}
+          />
+          <StatusIndicator 
+            status={isGettingNetwork ? 'loading' : networkInfo ? 'success' : networkError ? 'error' : 'idle'}
+            label={isGettingNetwork ? 'Detecting Network...' : networkInfo ? 'Network Ready' : networkError ? 'Network Failed' : 'Network Needed'}
+          />
+        </div>
+      )}
+
       {/* Auto-Detection Section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
