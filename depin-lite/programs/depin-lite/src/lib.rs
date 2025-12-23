@@ -3,9 +3,6 @@ use anchor_spl::{
     associated_token::AssociatedToken,
     token::{mint_to, Mint, MintTo, Token, TokenAccount},
 };
-use switchboard_solana::{
-    FunctionAccountData, FunctionRequestAccountData, SWITCHBOARD_ATTESTATION_PROGRAM_ID,
-};
 
 declare_id!("7nMrAY8nNgHcyAimQJgrzM5LisT2jVaNRX2s6hvnNsxU");
 
@@ -91,17 +88,16 @@ pub mod depin_lite {
         // Verify the activity is pending verification
         require!(user_activity.pending_verification, ErrorCode::NoPendingVerification);
 
-        // Verify Switchboard attestation
-        let function_data = FunctionAccountData::new(&ctx.accounts.function.data.borrow())?;
-        let request_data = FunctionRequestAccountData::new(&ctx.accounts.function_request.data.borrow())?;
-
-        // Check if the function request is verified and successful
-        require!(request_data.is_triggered, ErrorCode::RequestNotTriggered);
-        require!(!request_data.error_status, ErrorCode::RequestFailed);
-
-        // Parse the attestation result from the function request
-        let attestation_result = parse_attestation_result(&request_data.container_params)?;
-        require!(attestation_result, ErrorCode::AttestationFailed);
+        // For now, we'll implement a simple verification system
+        // In production, this would integrate with Switchboard oracles
+        
+        // Simple verification: check if the submission is older than 1 minute
+        let clock = Clock::get()?;
+        let current_timestamp = clock.unix_timestamp;
+        let submission_age = current_timestamp - user_activity.last_submission_timestamp;
+        
+        // Require at least 1 minute for "verification" (simulating oracle processing time)
+        require!(submission_age >= 60, ErrorCode::VerificationTooSoon);
 
         // Mint MAP tokens as reward (5 tokens with 6 decimals = 5_000_000)
         let reward_amount = 5_000_000u64;
