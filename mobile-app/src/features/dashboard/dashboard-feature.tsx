@@ -1,25 +1,36 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowRight, BookOpen, CookingPot, Droplets, LucideWallet, MessageCircleQuestion } from 'lucide-react'
+import { ArrowRight, BookOpen, CookingPot, Droplets, LucideWallet, MessageCircleQuestion, MapPin, Coins } from 'lucide-react'
 import React from 'react'
 import { AppHero } from '@/components/app-hero'
+import Link from 'next/link'
 
 const primary: {
   label: string
   href: string
   description: string
   icon: React.ReactNode
+  isExternal?: boolean
 }[] = [
+  {
+    label: 'DePIN Network',
+    href: '/depin',
+    description: 'Earn MAP tokens by contributing WiFi signal data to the decentralized physical infrastructure network.',
+    icon: <MapPin className="w-8 h-8 text-blue-400" />,
+    isExternal: false,
+  },
   {
     label: 'Solana Docs',
     href: 'https://solana.com/docs',
     description: 'The official documentation. Your first stop for understanding the Solana ecosystem.',
     icon: <BookOpen className="w-8 h-8 text-purple-400" />,
+    isExternal: true,
   },
   {
     label: 'Solana Cookbook',
     href: 'https://solana.com/developers/cookbook/',
     description: 'Practical examples and code snippets for common tasks when building on Solana.',
     icon: <CookingPot className="w-8 h-8 text-green-400" />,
+    isExternal: true,
   },
 ]
 
