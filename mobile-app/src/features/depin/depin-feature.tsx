@@ -168,10 +168,6 @@ export default function DepinFeature() {
         title="DePIN Network" 
         subtitle="Earn MAP tokens by contributing WiFi signal data to the decentralized network"
       >
-        {/* Temporary debug: show connected account address */}
-        {accountAddress && (
-          <div className="mt-4 text-sm text-muted-foreground">Connected: <span className="font-mono">{accountAddress}</span></div>
-        )}
       </AppHero>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
