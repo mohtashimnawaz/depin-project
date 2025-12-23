@@ -51,9 +51,9 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
           <WalletDropdown />
           <ClusterDropdown />
           <ThemeSelect />
-          <Link href="/depin" className="hidden md:inline-flex">
-            <Button aria-label="Get started">Get Started</Button>
-          </Link>
+          <Button asChild className="hidden md:inline-flex">
+            <Link href="/depin">Get Started</Link>
+          </Button>
         </div>
 
         {showMenu && (

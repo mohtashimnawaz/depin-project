@@ -1,6 +1,7 @@
 import HeroHiFi from '@/components/hero-hi-fi'
 import { QuickStats } from '@/components/quick-stats'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 export default function Home() {
   return (
@@ -11,9 +12,9 @@ export default function Home() {
         <QuickStats />
 
         <div className="mt-8 text-center">
-          <Link href="/depin" className="inline-block mt-4 px-6 py-3 rounded-md bg-blue-600 text-white hover:bg-blue-700">
-            Go to Dashboard
-          </Link>
+          <Button asChild size="lg" className="mt-4">
+            <Link href="/depin">Go to Dashboard</Link>
+          </Button>
         </div>
       </div>
     </div>

@@ -14,8 +14,8 @@ export default function HeroHiFi() {
             <p className="mt-4 text-base text-muted max-w-xl">Contribute WiFi signal data, help grow decentralized infrastructure, and earn MAP tokens. Connect your wallet and start contributing today.</p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button className="bg-primary text-white px-6 py-3 rounded-lg shadow-sm hover:opacity-95">Connect Wallet</Button>
-              <Button variant="outline" className="px-6 py-3 rounded-lg">Explore Network</Button>
+              <Button size="lg">Connect Wallet</Button>
+              <Button variant="outline" size="lg">Explore Network</Button>
             </div>
 
             <div className="mt-8 grid grid-cols-3 gap-4 text-sm text-muted">

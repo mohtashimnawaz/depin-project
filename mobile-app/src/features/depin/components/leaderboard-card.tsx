@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { 
   Trophy, 
@@ -173,9 +174,9 @@ export function LeaderboardCard({ userAddress, isLoading = false }: LeaderboardC
 
         {/* View Full Leaderboard */}
         <div className="pt-4 border-t">
-          <button className="w-full text-sm text-primary hover:text-primary/80 font-medium">
+          <Button variant="ghost" className="w-full justify-start">
             View Full Leaderboard →
-          </button>
+          </Button>
         </div>
       </CardContent>
     </Card>
