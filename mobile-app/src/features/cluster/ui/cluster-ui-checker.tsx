@@ -7,7 +7,7 @@ import { useClusterVersion } from '../data-access/use-cluster-version'
 export function ClusterUiChecker({ children }: { children: ReactNode }) {
   const { client } = useSolana()
   // Get cluster from env or default to devnet
-  const cluster = process.env.NEXT_PUBLIC_RPC_ENDPOINT?.includes('devnet') ? 'devnet' : 'mainnet-beta'
+  const cluster = process.env.NEXT_PUBLIC_RPC_ENDPOINT?.includes('devnet') ? { label: 'Devnet' } : { label: 'Mainnet' }
   const query = useClusterVersion()
 
   if (query.isLoading) {

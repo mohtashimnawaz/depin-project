@@ -21,6 +21,18 @@ import { LocationTroubleshooting } from '@/components/location-troubleshooting'
 import { StatusIndicator } from '@/components/status-indicator'
 import { toast } from 'sonner'
 
+interface LocationData {
+  latitude: number
+  longitude: number
+  accuracy: number
+}
+
+interface NetworkInfo {
+  signalStrength: number
+  networkType: string
+  isWifi: boolean
+}
+
 interface ActivitySubmissionFormProps {
   onSubmit: (data: { gpsLat: number; gpsLong: number; signalStrength: number }) => Promise<void>
   isSubmitting: boolean
