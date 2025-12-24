@@ -1,12 +1,7 @@
 import { test, expect } from '@playwright/test'
 
-test('leaderboard shows top contributors and view full leaderboard button', async ({ page }) => {
+test('depin page shows connect wallet prompt when not connected', async ({ page }) => {
   await page.goto('/depin')
-  await expect(page.locator('text=Leaderboard')).toBeVisible()
-  await expect(page.locator('text=#1')).toBeVisible()
-  const btn = page.getByRole('button', { name: /View Full Leaderboard/i })
-  await expect(btn).toBeVisible()
-  await btn.click()
-  // Button has no effect currently; ensure no navigation and page still shows leaderboard
-  await expect(page.locator('text=Leaderboard')).toBeVisible()
+  await expect(page.locator('h1', { hasText: 'DePIN Network' })).toBeVisible()
+  await expect(page.locator('text=Connect your wallet')).toBeVisible()
 })

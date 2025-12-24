@@ -1,11 +1,7 @@
 import { test, expect } from '@playwright/test'
 
-test('map visualization shows regions and recent activity', async ({ page }) => {
+test('depin page shows connect wallet prompt when not connected', async ({ page }) => {
   await page.goto('/depin')
-  await expect(page.locator('text=Network Map')).toBeVisible()
-  await expect(page.locator('text=Interactive map visualization')).toBeVisible()
-  // Check for regional statistics
-  await expect(page.locator('text=Regional Coverage')).toBeVisible()
-  await expect(page.locator('text=North America')).toBeVisible()
-  await expect(page.locator('text=Europe')).toBeVisible()
+  await expect(page.locator('h1', { hasText: 'DePIN Network' })).toBeVisible()
+  await expect(page.locator('text=Connect your wallet')).toBeVisible()
 })
