@@ -45,6 +45,8 @@ export default function DepinFeature() {
   } = useDepinClient()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [connectionStartTime, setConnectionStartTime] = useState<number | null>(null)
+  const [connectionTimeout, setConnectionTimeout] = useState(false)
 
   // Auto-refresh data every 30 seconds
   useEffect(() => {
@@ -57,6 +59,28 @@ export default function DepinFeature() {
     return () => clearInterval(interval)
   }, [account, refreshData])
 
+  // Track connection time and set timeout
+  useEffect(() => {
+    if (connected && !account && !connectionStartTime) {
+      setConnectionStartTime(Date.now())
+    } else if ((!connected || account) && connectionStartTime) {
+      setConnectionStartTime(null)
+      setConnectionTimeout(false)
+    }
+  }, [connected, account, connectionStartTime])
+
+  // Set timeout after 30 seconds
+  useEffect(() => {
+    if (connectionStartTime && !connectionTimeout) {
+      const timeout = setTimeout(() => {
+        if (Date.now() - connectionStartTime > 30000) {
+          setConnectionTimeout(true)
+        }
+      }, 30000)
+      return () => clearTimeout(timeout)
+    }
+  }, [connectionStartTime, connectionTimeout])
+
   // Debugging: log wallet state to console so we can see if it's connected and what the account object looks like
   useEffect(() => {
     console.debug('useSolana wallet state:', { connected, account })
@@ -65,22 +89,82 @@ export default function DepinFeature() {
   // Small auto-connector subcomponent: triggers `connect()` for the provided wallet once
   function AutoConnector({ wallet }: { wallet: any }) {
     const { connect } = useWalletUiWallet({ wallet })
+    const [connectionError, setConnectionError] = useState<string | null>(null)
+    const [retryCount, setRetryCount] = useState(0)
+
     useEffect(() => {
       let cancelled = false
+      let timeoutId: NodeJS.Timeout
+
       async function attempt() {
         try {
+          setConnectionError(null)
+          // Add a small delay to ensure wallet extension is ready
+          await new Promise(resolve => setTimeout(resolve, 1000))
+
           // Try to connect once automatically. If the user has previously authorized, this should be quick.
           await connect()
-        } catch (err) {
-          // ignore errors (user closed popup or denied)
-          if (!cancelled) console.debug('Auto connect failed:', err)
+        } catch (err: any) {
+          if (cancelled) return
+
+          console.error('Auto connect failed:', err)
+
+          // Provide more specific error messages
+          let errorMessage = 'Failed to connect to wallet'
+          if (err?.message?.includes('User rejected')) {
+            errorMessage = 'Connection rejected by user'
+          } else if (err?.message?.includes('Extension not found')) {
+            errorMessage = 'Wallet extension not found'
+          } else if (err?.message?.includes('Unexpected error')) {
+            errorMessage = 'Wallet extension error - please refresh and try again'
+          } else if (err?.name === 'WalletNotReadyError') {
+            errorMessage = 'Wallet is not ready - please unlock your wallet'
+          }
+
+          setConnectionError(errorMessage)
+
+          // Retry up to 2 times with exponential backoff
+          if (retryCount < 2) {
+            const delay = Math.pow(2, retryCount) * 2000 // 2s, 4s
+            timeoutId = setTimeout(() => {
+              if (!cancelled) {
+                setRetryCount(prev => prev + 1)
+                attempt()
+              }
+            }, delay)
+          }
         }
       }
+
       attempt()
+
       return () => {
         cancelled = true
+        if (timeoutId) clearTimeout(timeoutId)
       }
-    }, [connect])
+    }, [connect, retryCount])
+
+    // Show error state if connection fails after retries
+    if (connectionError && retryCount >= 2) {
+      return (
+        <div className="mt-4 p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/30 rounded-lg">
+          <div className="flex items-center gap-2 text-red-700 dark:text-red-300">
+            <AlertTriangle className="h-4 w-4" />
+            <span className="font-medium">Connection Error</span>
+          </div>
+          <p className="text-sm text-red-600 dark:text-red-400 mt-1">{connectionError}</p>
+          <button
+            className="mt-2 text-sm text-red-700 dark:text-red-300 underline hover:text-red-800 dark:hover:text-red-200"
+            onClick={() => {
+              setRetryCount(0)
+              setConnectionError(null)
+            }}
+          >
+            Try Again
+          </button>
+        </div>
+      )
+    }
 
     return null
   }
@@ -164,8 +248,10 @@ export default function DepinFeature() {
                         try {
                           const { connect } = useWalletUiWallet({ wallet: selectedWallet })
                           await connect()
-                        } catch (err) {
+                        } catch (err: any) {
                           console.error('Manual reconnect failed:', err)
+                          // Could add toast notification here
+                          alert(`Connection failed: ${err?.message || 'Unknown error'}`)
                         }
                       }}
                     >
@@ -183,6 +269,40 @@ export default function DepinFeature() {
 
   // Connected but account may still be initializing
   if (connected && !account) {
+    // Show timeout error if connection takes too long
+    if (connectionTimeout) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-950 flex items-center justify-center px-4">
+          <div className="relative text-center max-w-md">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl shadow-2xl mb-6">
+              <XCircle className="h-10 w-10 text-white" />
+            </div>
+
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Connection Timeout</h2>
+            <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-8">
+              We're having trouble connecting to your wallet. This might be due to network issues or wallet extension problems.
+            </p>
+
+            <div className="space-y-4">
+              <button
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
+                onClick={() => {
+                  setConnectionTimeout(false)
+                  setConnectionStartTime(null)
+                  window.location.reload()
+                }}
+              >
+                Refresh Page
+              </button>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                If the problem persists, try restarting your browser or wallet extension.
+              </p>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-950 flex items-center justify-center px-4">
         {/* Animated background */}
