@@ -7,7 +7,7 @@
     "test": "jest --passWithNoTests --config jest.config.ts",
     "test:watch": "jest --watch --config jest.config.ts",
     "test:e2e": "playwright test",
-    "test:axe": "jest --config jest.config.ts --testPathPattern \".*accessibility.test.tsx$\" --passWithNoTests",
+    "test:axe": "jest --config jest.config.ts --testPathPatterns \".*accessibility.test.tsx$\" --passWithNoTests",
     "lhci:autorun": "lhci autorun --config=lhci.config.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
