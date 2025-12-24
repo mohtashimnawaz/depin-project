@@ -14,29 +14,21 @@ import {
   CheckCircle, 
   AlertCircle,
   RefreshCw,
-  Smartphone
+  Smartphone,
+  RotateCcw
 } from 'lucide-react'
 import { LocationTroubleshooting } from '@/components/location-troubleshooting'
 import { StatusIndicator } from '@/components/status-indicator'
+import { toast } from 'sonner'
+}
 
 interface ActivitySubmissionFormProps {
   onSubmit: (data: { gpsLat: number; gpsLong: number; signalStrength: number }) => Promise<void>
   isSubmitting: boolean
+  onRetry?: () => void
 }
 
-interface LocationData {
-  latitude: number
-  longitude: number
-  accuracy: number
-}
-
-interface NetworkInfo {
-  signalStrength: number
-  networkType: string
-  isWifi: boolean
-}
-
-export function ActivitySubmissionForm({ onSubmit, isSubmitting }: ActivitySubmissionFormProps) {
+export function ActivitySubmissionForm({ onSubmit, isSubmitting, onRetry }: ActivitySubmissionFormProps) {
   const [location, setLocation] = useState<LocationData | null>(null)
   const [networkInfo, setNetworkInfo] = useState<NetworkInfo | null>(null)
   const [isGettingLocation, setIsGettingLocation] = useState(false)
