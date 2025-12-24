@@ -14,11 +14,10 @@ export function AppExplorerLink({
   const { client } = useSolana()
   // Get cluster from env or default to devnet
   const clusterId = process.env.NEXT_PUBLIC_RPC_ENDPOINT?.includes('devnet') ? 'solana:devnet' : 'solana:mainnet-beta'
-  const cluster = { id: clusterId }
   
   return (
     <a
-      href={getExplorerLink({ ...link, cluster: getSolanaClusterMoniker(cluster.id) })}
+      href={getExplorerLink({ ...link, cluster: getSolanaClusterMoniker(clusterId) })}
       target="_blank"
       rel="noopener noreferrer"
       className={className ? className : `link font-mono inline-flex gap-1`}

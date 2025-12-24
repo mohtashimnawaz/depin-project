@@ -6,12 +6,14 @@ import { AccountUiModalReceive } from './account-ui-modal-receive'
 import { AccountUiModalSend } from './account-ui-modal-send'
 
 export function AccountUiButtons({ address }: { address: Address }) {
-  const { account, cluster } = useSolana()
+  const { account } = useSolana()
+  // Get cluster from env or default to devnet
+  const cluster = { id: process.env.NEXT_PUBLIC_RPC_ENDPOINT?.includes('devnet') ? 'solana:devnet' : 'solana:mainnet' }
 
   return account ? (
     <div>
       <div className="space-x-2">
-        {cluster.id === 'solana:mainnet' ? null : <AccountUiModalAirdrop address={address} />}
+        {cluster.id === 'solana:mainnet-beta' ? null : <AccountUiModalAirdrop address={address} />}
         <ErrorBoundary errorComponent={() => null}>
           <AccountUiModalSend account={account} address={address} />
         </ErrorBoundary>

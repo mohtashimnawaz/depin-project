@@ -5,7 +5,9 @@ import { useSolana } from '@/components/solana/use-solana'
 import { getTokenAccountsByOwner } from './get-token-accounts-by-owner'
 
 export function useGetTokenAccountsQuery({ address }: { address: Address }) {
-  const { client, cluster } = useSolana()
+  const { client } = useSolana()
+  // Get cluster from env or default to devnet
+  const cluster = process.env.NEXT_PUBLIC_RPC_ENDPOINT?.includes('devnet') ? 'devnet' : 'mainnet-beta'
 
   return useQuery({
     queryKey: ['get-token-accounts', { cluster, address }],

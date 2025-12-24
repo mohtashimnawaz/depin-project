@@ -6,7 +6,9 @@ import { useRequestAirdropMutation } from '../data-access/use-request-airdrop-mu
 import { useGetBalanceQuery } from '../data-access/use-get-balance-query'
 
 export function AccountUiBalanceCheck({ address }: { address: Address }) {
-  const { cluster } = useSolana()
+  const { client } = useSolana()
+  // Get cluster from env or default to devnet
+  const cluster = process.env.NEXT_PUBLIC_RPC_ENDPOINT?.includes('devnet') ? { label: 'Devnet' } : { label: 'Mainnet' }
   const mutation = useRequestAirdropMutation({ address })
   const query = useGetBalanceQuery({ address })
 
