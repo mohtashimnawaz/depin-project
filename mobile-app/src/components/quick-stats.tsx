@@ -11,6 +11,8 @@ import {
   Zap
 } from 'lucide-react'
 
+import StatCard from '@/components/stat-card'
+
 export function QuickStats() {
   const stats = [
     {
@@ -48,23 +50,13 @@ export function QuickStats() {
       {stats.map((stat) => {
         const Icon = stat.icon
         return (
-          <Card key={stat.title}>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">
-                    {stat.title}
-                  </p>
-                  <p className="text-2xl font-bold">{stat.value}</p>
-                  <Badge variant="secondary" className="text-xs mt-1">
-                    <TrendingUp className="h-3 w-3 mr-1" />
-                    {stat.change}
-                  </Badge>
-                </div>
-                <Icon className={`h-8 w-8 ${stat.color}`} />
-              </div>
-            </CardContent>
-          </Card>
+          <StatCard
+            key={stat.title}
+            title={stat.title}
+            value={stat.value}
+            change={stat.change}
+            icon={<Icon className={`h-8 w-8 ${stat.color}`} />}
+          />
         )
       })}
     </div>
