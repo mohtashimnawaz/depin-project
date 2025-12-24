@@ -20,7 +20,9 @@ import {
   XCircle, 
   Loader2,
   AlertTriangle,
-  TrendingUp
+  TrendingUp,
+  Globe,
+  Users
 } from 'lucide-react'
 import { useDepinClient } from './hooks/use-depin-client'
 import { ActivitySubmissionForm } from './components/activity-submission-form'
@@ -90,38 +92,88 @@ export default function DepinFeature() {
   // If wallet isn't connected, show the connect prompt (and auto-attempt if a wallet was previously selected)
   if (!connected) {
     return (
-      <div className="hero py-[64px]">
-        <div className="hero-content text-center">
-          <div className="max-w-md">
-            <h1 className="text-5xl font-bold">DePIN Network</h1>
-            <p className="py-6">
-              Connect your wallet to start earning MAP tokens by contributing to the decentralized physical infrastructure network.
-            </p>
-            <div className="flex flex-col items-center gap-3">
-              <div className="flex justify-center">
-                <div className="wallet-dropdown" />
-              </div>
-              {/** If there is a selected wallet provided by the wallet UI, try auto-connecting quietly */}
-              {selectedWallet ? <AutoConnector wallet={selectedWallet} /> : wallets?.length === 1 ? <AutoConnector wallet={wallets[0]} /> : null}
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-950">
+        {/* Animated background */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-tr from-indigo-400/20 to-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        </div>
 
-              {/** Manual reconnect button for debugging */}
-              {selectedWallet ? (
-                <div className="mt-3 text-sm text-muted-foreground">
-                  <button
-                    className="underline"
-                    onClick={async () => {
-                      try {
-                        const { connect } = useWalletUiWallet({ wallet: selectedWallet })
-                        await connect()
-                      } catch (err) {
-                        console.error('Manual reconnect failed:', err)
-                      }
-                    }}
-                  >
-                    Reconnect
-                  </button>
+        <div className="relative flex items-center justify-center min-h-screen px-4">
+          <div className="max-w-md w-full">
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-2xl mb-6 animate-float">
+                <Globe className="h-10 w-10 text-white" />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent mb-4">
+                DePIN Network
+              </h1>
+              <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+                Connect your wallet to start earning MAP tokens by contributing to the decentralized physical infrastructure network.
+              </p>
+            </div>
+
+            <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-white/20 dark:border-slate-700/20">
+              <div className="flex flex-col items-center gap-6">
+                <div className="flex justify-center w-full">
+                  <div className="wallet-dropdown" />
                 </div>
-              ) : null}
+
+                {/* Feature highlights */}
+                <div className="grid grid-cols-1 gap-4 w-full text-left">
+                  <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <MapPin className="h-4 w-4 text-white" />
+                    </div>
+                    <div>
+                      <div className="font-medium text-slate-900 dark:text-white">Submit Location Data</div>
+                      <div className="text-sm text-slate-600 dark:text-slate-400">Earn rewards for verified coverage</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-950/30 rounded-lg border border-green-100 dark:border-green-800/30">
+                    <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <TrendingUp className="h-4 w-4 text-white" />
+                    </div>
+                    <div>
+                      <div className="font-medium text-slate-900 dark:text-white">Track Earnings</div>
+                      <div className="text-sm text-slate-600 dark:text-slate-400">Monitor your MAP token rewards</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-purple-50 dark:bg-purple-950/30 rounded-lg border border-purple-100 dark:border-purple-800/30">
+                    <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Users className="h-4 w-4 text-white" />
+                    </div>
+                    <div>
+                      <div className="font-medium text-slate-900 dark:text-white">Join Community</div>
+                      <div className="text-sm text-slate-600 dark:text-slate-400">Climb the global leaderboard</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/** If there is a selected wallet provided by the wallet UI, try auto-connecting quietly */}
+                {selectedWallet ? <AutoConnector wallet={selectedWallet} /> : wallets?.length === 1 ? <AutoConnector wallet={wallets[0]} /> : null}
+
+                {/** Manual reconnect button for debugging */}
+                {selectedWallet ? (
+                  <div className="mt-4 text-center">
+                    <button
+                      className="text-sm text-slate-500 dark:text-slate-400 underline hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
+                      onClick={async () => {
+                        try {
+                          const { connect } = useWalletUiWallet({ wallet: selectedWallet })
+                          await connect()
+                        } catch (err) {
+                          console.error('Manual reconnect failed:', err)
+                        }
+                      }}
+                    >
+                      Having trouble? Try reconnecting
+                    </button>
+                  </div>
+                ) : null}
+              </div>
             </div>
           </div>
         </div>
@@ -132,11 +184,29 @@ export default function DepinFeature() {
   // Connected but account may still be initializing
   if (connected && !account) {
     return (
-      <div className="hero py-[64px]">
-        <div className="hero-content text-center">
-          <div className="max-w-md">
-            <h2 className="text-2xl font-semibold">Connecting to wallet...</h2>
-            <p className="py-4 text-muted-foreground">Please wait a moment while we fetch your account details.</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-950 flex items-center justify-center px-4">
+        {/* Animated background */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse"></div>
+        </div>
+
+        <div className="relative text-center max-w-md">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-2xl mb-6">
+            <div className="relative">
+              <Loader2 className="h-10 w-10 text-white animate-spin" />
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full animate-ping opacity-20"></div>
+            </div>
+          </div>
+
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Connecting to wallet...</h2>
+          <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-8">
+            Please wait a moment while we fetch your account details and initialize your dashboard.
+          </p>
+
+          <div className="flex justify-center space-x-2">
+            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+            <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+            <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
           </div>
         </div>
       </div>
@@ -171,6 +241,7 @@ export default function DepinFeature() {
   return (
     <div>
       <AppHero 
+        variant="depin"
         title="DePIN Network" 
         subtitle="Earn MAP tokens by contributing WiFi signal data to the decentralized network"
       >

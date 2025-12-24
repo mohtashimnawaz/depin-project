@@ -6,7 +6,9 @@ describe('HeroHiFi', () => {
   it('renders hero title, subtitle, and CTAs', () => {
     render(<HeroHiFi />)
 
-    expect(screen.getByText(/Build and earn on the DePIN Network/i)).toBeInTheDocument()
+    expect(screen.getByText(/Earn/i)).toBeInTheDocument()
+    expect(screen.getByText(/MAP Tokens/i)).toBeInTheDocument()
+    expect(screen.getByText(/by Contributing to DePIN/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Connect Wallet/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Explore Network/i })).toBeInTheDocument()
   })
