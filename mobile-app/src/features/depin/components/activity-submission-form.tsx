@@ -94,11 +94,23 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting, onRetry }: Acti
         accuracy: position.coords.accuracy
       })
     } catch (error) {
-      console.error('Error getting location:', error)
       const errorMessage = error instanceof Error 
         ? error.message 
         : 'Failed to get location. Please enable location services or use manual input.'
+      
+      // Only log unexpected errors, not permission denials
+      if (!errorMessage.includes('denied')) {
+        console.error('Error getting location:', error)
+      }
+      
       setLocationError(errorMessage)
+      
+      // Show helpful toast for permission denied
+      if (errorMessage.includes('denied')) {
+        toast.info('Location access denied. You can use manual input instead.', {
+          description: 'Switch to manual input mode to enter your location manually.'
+        })
+      }
     } finally {
       setIsGettingLocation(false)
     }
@@ -315,16 +327,28 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting, onRetry }: Acti
                       <span className="text-sm text-red-500">Location Error</span>
                     </div>
                     <p className="text-sm text-muted-foreground">{locationError}</p>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={getCurrentLocation}
-                      className="w-full"
-                    >
-                      <RefreshCw className="h-4 w-4 mr-2" />
-                      Retry Location
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={getCurrentLocation}
+                        className="flex-1"
+                      >
+                        <RefreshCw className="h-4 w-4 mr-2" />
+                        Retry
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => setUseManualInput(true)}
+                        className="flex-1"
+                      >
+                        <Smartphone className="h-4 w-4 mr-2" />
+                        Manual Input
+                      </Button>
+                    </div>
                   </div>
                 ) : (
                   <div className="space-y-2">
