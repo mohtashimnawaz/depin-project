@@ -162,6 +162,12 @@ export default function DepinFeature() {
     }
   }
 
+  const handleRetry = () => {
+    // Reset submission state and refresh data
+    setIsSubmitting(false)
+    refreshData()
+  }
+
   return (
     <div>
       <AppHero 
@@ -265,6 +271,7 @@ export default function DepinFeature() {
                   <ActivitySubmissionForm 
                     onSubmit={handleActivitySubmit}
                     isSubmitting={isSubmitting}
+                    onRetry={handleRetry}
                   />
                 ) : (
                   <div className="text-center py-8">
@@ -350,7 +357,10 @@ export default function DepinFeature() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             <NetworkStatsCard isLoading={isLoading} />
-            <MapVisualization isLoading={isLoading} />
+            <MapVisualization 
+              isLoading={isLoading} 
+              userLocation={account ? { lat: 37.7749, lng: -122.4194 } : undefined} // Mock user location
+            />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">

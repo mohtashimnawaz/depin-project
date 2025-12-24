@@ -20,7 +20,6 @@ import {
 import { LocationTroubleshooting } from '@/components/location-troubleshooting'
 import { StatusIndicator } from '@/components/status-indicator'
 import { toast } from 'sonner'
-}
 
 interface ActivitySubmissionFormProps {
   onSubmit: (data: { gpsLat: number; gpsLong: number; signalStrength: number }) => Promise<void>
@@ -45,6 +44,7 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting, onRetry }: Acti
   // Form error states for inline validation
   const [formError, setFormError] = useState<string | null>(null)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [submissionError, setSubmissionError] = useState<string | null>(null)
 
   // Get user's location
   const getCurrentLocation = async () => {
@@ -139,6 +139,7 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting, onRetry }: Acti
 
     setFormError(null)
     setFieldErrors({})
+    setSubmissionError(null)
 
     let lat: number, lng: number, signal: number
 
@@ -187,11 +188,29 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting, onRetry }: Acti
       signal = networkInfo.signalStrength
     }
 
-    await onSubmit({
-      gpsLat: lat,
-      gpsLong: lng,
-      signalStrength: signal
-    })
+    try {
+      toast.loading('Submitting activity...', { id: 'submit-activity' })
+      await onSubmit({
+        gpsLat: lat,
+        gpsLong: lng,
+        signalStrength: signal
+      })
+      toast.success('Activity submitted successfully! Verification pending.', { id: 'submit-activity' })
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to submit activity'
+      setSubmissionError(errorMessage)
+      toast.error(errorMessage, { id: 'submit-activity' })
+    }
+  }
+
+  const handleRetry = () => {
+    setSubmissionError(null)
+    if (onRetry) {
+      onRetry()
+    } else {
+      // Re-submit the form
+      handleSubmit(new Event('submit') as any)
+    }
   }
 
   return (
@@ -477,6 +496,28 @@ export function ActivitySubmissionForm({ onSubmit, isSubmitting, onRetry }: Acti
           </>
         )}
       </Button>
+
+      {/* Submission Error and Retry */}
+      {submissionError && (
+        <div className="space-y-2">
+          <div className="rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-4 w-4" />
+              <span>{submissionError}</span>
+            </div>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleRetry}
+            className="w-full"
+          >
+            <RotateCcw className="h-4 w-4 mr-2" />
+            Retry Submission
+          </Button>
+        </div>
+      )}
 
       {!useManualInput && (!location || !networkInfo) && (
         <div className="text-xs text-center text-muted-foreground space-y-1">
